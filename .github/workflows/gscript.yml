@@ -1,0 +1,34 @@
+name: Label & comment issues
+on:
+  issues:
+    types:
+      - reopened
+      - opened
+jobs:
+  label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: attach label to issues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["issue", "fix"]
+            })
+      - name: Comment on new issue
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+           Thanks for opening this issue! We'll take a look as soon as possible.
+
+# Comment on when an issue is closed
+
+# Comment on when an users opens the first pull request 
+
+# Check the quality of php code.
